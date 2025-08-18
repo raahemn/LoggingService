@@ -1,0 +1,38 @@
+{
+  "server": {
+    "port": "PORT"
+  },
+  "database": {
+    "mongodb": {
+      "url": "MONGODB_URL"
+    }
+  },
+  "auth": {
+    "jwt": {
+      "secret": "JWT_SECRET"
+    },
+    "google": {
+      "clientId": "GOOGLE_CLIENT_ID",
+      "clientSecret": "GOOGLE_CLIENT_SECRET",
+      "adminImpersonationEmail": "GOOGLE_ADMIN_IMPERSONATION_EMAIL",
+      "workspaceDomain": "GOOGLE_WORKSPACE_DOMAIN",
+      "adminScopes": "GOOGLE_ADMIN_SCOPES",
+      "clientEmail": "CLIENT_EMAIL",
+      "privateKey": "PRIVATE_KEY"
+    }
+  },
+  "gemini": {
+    "apiKey": "GEMINI_API_KEY"
+  },
+  "urls": {
+    "backend": "BACKEND_URL",
+    "frontend": "FRONTEND_URL"
+  },
+  "smtp": {
+    "host": "SMTP_HOST",
+    "port": "SMTP_PORT",
+    "secure": "SMTP_SECURE",
+    "user": "SMTP_USER",
+    "pass": "SMTP_PASS"
+  }
+}
