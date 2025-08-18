@@ -3,7 +3,6 @@ import { Worker, Job } from "bullmq";
 import mongoose from "mongoose";
 import Log from "./logSchema";
 import { parseLogLine } from "./logParser";
-import { alertingService } from "../alertingService";
 
 // Connect to MongoDB (use your connection string)
 const mongoUrl = process.env.MONGODB_URL;
@@ -50,8 +49,6 @@ export const worker = new Worker(
 
       await Log.create(logEntry);
       
-      // Check for alerts on ERROR logs
-      await alertingService.checkAndAlert(logEntry.sourceApp, logEntry.logLevel);
     } else {
       console.warn(`Could not parse log: ${JSON.stringify(job.data)}`);
     }

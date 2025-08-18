@@ -7,7 +7,5 @@ RUN npm install --include=dev
 
 COPY ./simulator .
 
-# Make the startup script executable
-RUN chmod +x start.sh
-
-CMD ["sh", "start.sh"]
+# Start the application
+CMD ["npx", "ts-node", "index.ts"]

@@ -1,0 +1,275 @@
+networks:
+  logstream:
+    driver: bridge
+
+services:
+
+  redis:
+    image: redis:7-alpine
+    container_name: logstream-redis
+    ports:
+      - "${REDIS_EXTERNAL_PORT}:6379"
+    networks:
+      - logstream
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: ${REDIS_MEMORY_LIMIT}
+          cpus: '${REDIS_CPU_LIMIT}'
+
+  mongodb:
+    image: mongo:7
+    container_name: logstream-mongodb
+    ports:
+      - "${MONGODB_EXTERNAL_PORT}:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - logstream
+    restart: unless-stopped
+    command: ["mongod", "--quiet", "--logpath", "/dev/null"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: ${MONGODB_MEMORY_LIMIT}
+          cpus: '${MONGODB_CPU_LIMIT}'
+
+
+  producer:
+    build: 
+      context: .
+      dockerfile: ./producer/Dockerfile
+    container_name: logstream-producer
+    ports:
+      - "${PRODUCER_EXTERNAL_PORT}:3001"
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - NODE_ENV=${NODE_ENV}
+    networks:
+      - logstream
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 20s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: ${PRODUCER_MEMORY_LIMIT}
+          cpus: '${PRODUCER_CPU_LIMIT}'
+
+  consumer:
+    build:
+      context: .
+      dockerfile: ./consumer/Dockerfile
+    container_name: logstream-consumer
+    ports:
+      - "${CONSUMER_EXTERNAL_PORT}:3002"
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - MONGODB_URL=${MONGODB_URL}
+      - NODE_ENV=${NODE_ENV}
+    networks:
+      - logstream
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: ${CONSUMER_MEMORY_LIMIT}
+          cpus: '${CONSUMER_CPU_LIMIT}'
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ./api-gateway/Dockerfile
+    container_name: logstream-api-gateway
+    ports:
+      - "${API_GATEWAY_EXTERNAL_PORT}:3000"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+    networks:
+      - logstream
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: ${API_GATEWAY_MEMORY_LIMIT}
+          cpus: '${API_GATEWAY_CPU_LIMIT}'
+
+
+  # Fluent Bit for App 1
+  fluent-bit-app1:
+    build:
+      context: ./fluent-bit
+      dockerfile: Dockerfile
+    container_name: logstream-fluent-bit-app1
+    environment:
+      - APP_NAME=app1
+      - LOG_PATH=/simulator/logs/app.log
+      - PRODUCER_HOST=${PRODUCER_HOST}
+      - PRODUCER_PORT=${PRODUCER_PORT}
+      - NODE_ENV=${NODE_ENV}
+    volumes:
+      - ./simulator/logs/app1:/simulator/logs:ro
+      - ./fluent-bit/storage/app1:/fluent-bit/storage
+      - ./fluent-bit/configs/app1.conf:/fluent-bit/etc/fluent-bit.conf:ro
+    networks:
+      - logstream
+    depends_on:
+      producer:
+        condition: service_healthy
+    restart: unless-stopped
+    ports:
+      - "${FLUENT_BIT_APP1_PORT}:2020"
+
+  # Fluent Bit for App 2
+  fluent-bit-app2:
+    build:
+      context: ./fluent-bit
+      dockerfile: Dockerfile
+    container_name: logstream-fluent-bit-app2
+    environment:
+      - APP_NAME=app2
+      - LOG_PATH=/simulator/logs/app.log
+      - PRODUCER_HOST=${PRODUCER_HOST}
+      - PRODUCER_PORT=${PRODUCER_PORT}
+      - NODE_ENV=${NODE_ENV}
+    volumes:
+      - ./simulator/logs/app2:/simulator/logs:ro
+      - ./fluent-bit/storage/app2:/fluent-bit/storage
+      - ./fluent-bit/configs/app2.conf:/fluent-bit/etc/fluent-bit.conf:ro
+    networks:
+      - logstream
+    depends_on:
+      producer:
+        condition: service_healthy
+    restart: unless-stopped
+    ports:
+      - "${FLUENT_BIT_APP2_PORT}:2020"
+
+  # Fluent Bit for App 3
+  fluent-bit-app3:
+    build:
+      context: ./fluent-bit
+      dockerfile: Dockerfile
+    container_name: logstream-fluent-bit-app3
+    environment:
+      - APP_NAME=app3
+      - LOG_PATH=/simulator/logs/app.log
+      - PRODUCER_HOST=${PRODUCER_HOST}
+      - PRODUCER_PORT=${PRODUCER_PORT}
+      - NODE_ENV=${NODE_ENV}
+    volumes:
+      - ./simulator/logs/app3:/simulator/logs:ro
+      - ./fluent-bit/storage/app3:/fluent-bit/storage
+      - ./fluent-bit/configs/app3.conf:/fluent-bit/etc/fluent-bit.conf:ro
+    networks:
+      - logstream
+    depends_on:
+      producer:
+        condition: service_healthy
+    restart: unless-stopped
+    ports:
+      - "${FLUENT_BIT_APP3_PORT}:2020"
+
+
+  # Simulator for App 1
+  simulator-app1:
+    build:
+      context: .
+      dockerfile: ./simulator/Dockerfile
+    container_name: logstream-simulator-app1
+    environment:
+      - APP_NAME=app1
+    volumes:
+      - ./simulator/logs/app1:/usr/src/app/logs
+    networks:
+      - logstream
+    depends_on:
+      producer:
+        condition: service_healthy
+      fluent-bit-app1:
+        condition: service_started
+    restart: unless-stopped
+
+  # Simulator for App 2  
+  simulator-app2:
+    build:
+      context: .
+      dockerfile: ./simulator/Dockerfile
+    container_name: logstream-simulator-app2
+    environment:
+      - APP_NAME=app2
+    volumes:
+      - ./simulator/logs/app2:/usr/src/app/logs
+    networks:
+      - logstream
+    depends_on:
+      producer:
+        condition: service_healthy
+      fluent-bit-app2:
+        condition: service_started
+    restart: unless-stopped
+
+  # Simulator for App 3
+  simulator-app3:
+    build:
+      context: .
+      dockerfile: ./simulator/Dockerfile
+    container_name: logstream-simulator-app3
+    environment:
+      - APP_NAME=app3
+    volumes:
+      - ./simulator/logs/app3:/usr/src/app/logs
+    networks:
+      - logstream
+    depends_on:
+      producer:
+        condition: service_healthy
+      fluent-bit-app3:
+        condition: service_started
+    restart: unless-stopped
+
+  vdom-frontend:
+    build: ./vdom-frontend
+    ports:
+      - "${FRONTEND_EXTERNAL_PORT}:8000"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - API_URL=${API_BASE_URL}
+    depends_on:
+      - api-gateway
+
+volumes:
+  redis_data:
+    driver: local
+  mongodb_data:
+    driver: local
+  fluent_bit_storage_app1:
+    driver: local
+  fluent_bit_storage_app2:
+    driver: local
+  fluent_bit_storage_app3:
+    driver: local
+  shared-logs:
+    driver: local

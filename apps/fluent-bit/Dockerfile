@@ -1,7 +1,6 @@
 FROM fluent/fluent-bit:2.2
 
-# Copy your custom config and parsers
-COPY fluent-bit.conf /fluent-bit/etc/fluent-bit.conf
+# Copy parsers configuration
 COPY parsers.conf /fluent-bit/etc/parsers.conf
 
 # Create storage directory for state and buffering
