@@ -452,6 +452,18 @@
         "path": "libs/chai/chai.js",
         "cdnPath": "chai/chai-4.5.0.min"
       }
+    },
+    "socket.io-client": {
+      "cdn": "local",
+      "cwd": "node_modules/socket.io-client/dist",
+      "debug": {
+        "src": "socket.io.js",
+        "path": "libs/socket.io-client/socket.io.js"
+      },
+      "release": {
+        "src": "socket.io.min.js",
+        "path": "libs/socket.io-client/socket.io.min.js"
+      }
     }
   }
 }

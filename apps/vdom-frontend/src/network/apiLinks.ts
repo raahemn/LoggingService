@@ -35,6 +35,8 @@ class ApiLinks {
   static readonly GET_STARRED_MESSAGES: string = `${ApiLinks.API_BASE_URL}/starred-messages`;
   static readonly ADD_STARRED_MESSAGE: string = `${ApiLinks.API_BASE_URL}/starred-messages`;
   static readonly REMOVE_STARRED_MESSAGE: string = `${ApiLinks.API_BASE_URL}/starred-messages`;
+
+  static readonly SOCKET: string = "http://localhost:3000";
 }
 
 export default ApiLinks;

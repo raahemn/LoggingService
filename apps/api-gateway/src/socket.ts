@@ -20,8 +20,10 @@ export function initSocket(server: http.Server) {
 
    // Auth middleware
   io.use((socket, next) => {
+    console.log('🔒 Authenticating socket connection...')
     try {
-      const authHeader = socket.handshake.headers.authorization as string | undefined;
+        console.log('Socket handshake headers:', socket.handshake);
+      const authHeader = socket.handshake.auth?.token as string | undefined;
       if (!authHeader) return next(new Error("Access token required"));
 
       const token = authHeader.split(" ")[1];
