@@ -8,6 +8,7 @@ import "ojs/ojmenu";
 import "ojs/ojbutton";
 import "oj-c/button";
 import { Notifications } from "./notifications";
+import { Chatbot } from "./chatbot";
 
 type Props = Readonly<{
   appName: string,
@@ -76,6 +77,7 @@ export function Header({ appName, userLogin, onLogout,  onToggleDrawer, isAuthen
         </div>
         <div class="oj-flex-bar-end" style="padding-right: 0; margin-right: 0; display: flex; align-items: center;">
           <Notifications />
+          <Chatbot />
           <oj-toolbar>
             <oj-menu-button id="userMenu" display={getDisplayType()} chroming="borderless">
               <span>{getUserName()}</span>

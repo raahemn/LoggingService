@@ -4,6 +4,7 @@ import * as authController from './authControllers';
 import * as userController from './userControllers';
 import * as analyticsController from './analyticsController';
 import * as alertController from './alertController';
+import * as starredMessagesController from './starredMessages.controller';
 
 export {
   applicationController,
@@ -12,4 +13,5 @@ export {
   userController,
   analyticsController,
   alertController,
+  starredMessagesController,
 };

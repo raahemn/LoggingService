@@ -6,6 +6,7 @@ import { googleDirectoryService } from './services/googleDirectoryService'
 import { startAgenda } from './config/agenda';
 import { monitoringService } from './services/monitoringService'
 import { logRetentionService } from './services/dataRetentionService'
+import { initializeChatbot, closeChatbot } from './controllers/chatbotController'
 import logger from './config/logger'
 
 // Debug loggers for different components
@@ -61,6 +62,15 @@ mongoose
     monitoringService.start();
     serviceDebugger.info('✅ Monitoring service started');
 
+    // Initialize chatbot service
+    startupDebugger.info('Initializing Chatbot service...')
+    try {
+      await initializeChatbot();
+      serviceDebugger.info('✅ Chatbot service initialized successfully')
+    } catch (error) {
+      serviceDebugger.error('❌ Chatbot service initialization failed:', error)
+    }
+
     startupDebugger.info('Initializing Google Directory service...')
     googleDirectoryService
       .testConnection()
@@ -82,3 +92,16 @@ mongoose
   .catch((error) => {
     dbDebugger.error('Database connection failed:', error)
   })
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  startupDebugger.info('SIGTERM received, shutting down gracefully...')
+  await closeChatbot()
+  process.exit(0)
+})
+
+process.on('SIGINT', async () => {
+  startupDebugger.info('SIGINT received, shutting down gracefully...')
+  await closeChatbot()
+  process.exit(0)
+})

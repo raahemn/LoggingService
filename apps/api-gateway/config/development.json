@@ -21,6 +21,9 @@
       "privateKey": "PRIVATE_KEY"
     }
   },
+  "gemini": {
+    "apiKey": "GEMINI_API_KEY"
+  },
   "urls": {
     "backend": "BACKEND_URL",
     "frontend": "FRONTEND_URL"

@@ -4,6 +4,7 @@ export interface IUser extends Document {
   username: string
   email: string
   active: boolean
+  starredMessages: string[]
 }
 
 const UserSchema = new Schema<IUser>({
@@ -21,6 +22,10 @@ const UserSchema = new Schema<IUser>({
   active: {
     type: Boolean,
     default: true,
+  },
+  starredMessages: {
+    type: [String],
+    default: [],
   },
 }, {
   timestamps: true,

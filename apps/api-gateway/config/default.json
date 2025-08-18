@@ -31,5 +31,8 @@
     "secure": false,
     "user": "",
     "pass": ""
+  },
+  "gemini": {
+    "apiKey": ""
   }
 }

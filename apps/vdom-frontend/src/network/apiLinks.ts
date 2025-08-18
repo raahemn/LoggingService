@@ -25,6 +25,16 @@ class ApiLinks {
   // Alert APIs
   static readonly GET_ALERTS: string = `${ApiLinks.API_BASE_URL}/alerts`;
   static readonly RESOLVE_ALERT = (id: string): string => `${ApiLinks.API_BASE_URL}/alerts/${id}/resolve`;
+
+  // Chatbot APIs
+  static readonly CHAT_MESSAGE: string = `${ApiLinks.API_BASE_URL}/chatbot/chat`;
+  static readonly EXECUTE_OPERATION = (operationId: string): string => `${ApiLinks.API_BASE_URL}/chatbot/operation/${operationId}/execute`;
+  static readonly CANCEL_OPERATION = (operationId: string): string => `${ApiLinks.API_BASE_URL}/chatbot/operation/${operationId}/cancel`;
+
+  // Starred Messages APIs
+  static readonly GET_STARRED_MESSAGES: string = `${ApiLinks.API_BASE_URL}/starred-messages`;
+  static readonly ADD_STARRED_MESSAGE: string = `${ApiLinks.API_BASE_URL}/starred-messages`;
+  static readonly REMOVE_STARRED_MESSAGE: string = `${ApiLinks.API_BASE_URL}/starred-messages`;
 }
 
 export default ApiLinks;
