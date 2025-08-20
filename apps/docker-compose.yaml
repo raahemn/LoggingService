@@ -18,6 +18,7 @@ services:
     restart: unless-stopped
     environment:
       - FLUENTD_CONF=fluent.conf
+      - MONGODB_URL_FLUENTD=${MONGODB_URL_FLUENTD}
 
 
   # Simulator for App 1
