@@ -39,6 +39,7 @@ export const useAlerts = () => {
 
   return {
     alerts,
+    setAlerts,
     loading,
     error,
     refetch: fetchAlerts,

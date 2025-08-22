@@ -25,9 +25,9 @@ class SocketService {
 
     if (!this.socket) {
       this.socket = io(ApiLinks.SOCKET, {
-  transports: ["websocket"],
-  auth: { token: `Bearer ${AuthManager.getToken()}` }
-});
+        transports: ["websocket"],
+        auth: { token: `Bearer ${AuthManager.getToken()}` },
+      });
 
       this.socket.on("connect", () => {
         console.log("✅ Socket connected:", this.socket?.id);
