@@ -14,11 +14,11 @@ export const getLastLogTime = (appId: string, logs: Log[]): string => {
     return 'No logs';
   }
 
-  const sortedLogs = appLogs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const sortedLogs = appLogs.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
   const lastLog = sortedLogs[0];
   
   const now = new Date();
-  const lastLogDate = new Date(lastLog.date);
+  const lastLogDate = new Date(lastLog.time);
   const diffInMinutes = Math.floor((now.getTime() - lastLogDate.getTime()) / (1000 * 60));
   
   if (diffInMinutes < 1) {

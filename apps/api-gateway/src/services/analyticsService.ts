@@ -45,7 +45,7 @@ export interface AnalyticsResponse {
 }
 
 interface MongoQuery {
-  date: { $gte: Date; $lte: Date };
+  time: { $gte: Date; $lte: Date };
   sourceApp?: { $in: mongoose.Types.ObjectId[] };
   logLevel?: { $in: string[] };
 }
@@ -68,7 +68,7 @@ export class AnalyticsService {
 
     // Build MongoDB query
     const query: MongoQuery = {
-      date: { $gte: from, $lte: to }
+      time: { $gte: from, $lte: to }
     };
 
     if (appIds.length) {
@@ -270,7 +270,7 @@ export class AnalyticsService {
 
   private static getGroupFields(granularity: string): Record<string, Record<string, Record<string, string>>> {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const base = { date: '$date', timezone };
+    const base = { date: '$time', timezone };
 
     const fields: Record<string, Record<string, Record<string, string>>> = {
       year: { $year: base },

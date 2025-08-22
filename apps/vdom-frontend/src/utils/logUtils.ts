@@ -14,7 +14,7 @@ export class LogUtils {
         return;
       }
 
-      const logDate = new Date(log.date);
+      const logDate = new Date(log.time);
       if (isNaN(logDate.getTime())) {
         return;
       }
@@ -37,7 +37,7 @@ export class LogUtils {
 
   static getLatestLogDate(logs: Log[]): string | null {
     if (logs.length === 0) return null;
-    return logs[logs.length - 1].date;
+    return logs[logs.length - 1].time;
   }
 
   static mergeLogs(existingLogs: Log[], newLogs: Log[]): Log[] {
@@ -71,7 +71,7 @@ export const formatTimestamp = (date: string | Date): string => {
 export const convertLogsToTableFormat = (logs: Log[]): TableLog[] => {
   return logs.map((log, index) => ({
     id: log._id || index.toString(),
-    timestamp: formatTimestamp(log.date),
+    timestamp: formatTimestamp(log.time),
     logLevel: log.logLevel,
     traceId: log.traceId || 'N/A',
     sourceApp: log.sourceApp || 'Unknown',

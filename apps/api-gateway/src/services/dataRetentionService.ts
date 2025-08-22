@@ -7,7 +7,7 @@ const retentionDebugger = logger.withTraceId('RETENTION');
 
 class LogRetentionService {
   private readonly COLLECTION_NAME = 'logs';
-  private readonly DATE_FIELD = 'date';
+  private readonly DATE_FIELD = 'time';
 
   /**
    * Initialize TTL index for logs collection

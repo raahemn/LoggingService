@@ -44,7 +44,7 @@ export const worker = new Worker(
         logLevel: parsed.logLevel || parsed.log_level || parsed.level || "INFO",
         traceId: parsed.traceId || parsed.trace_id || "",
         sourceApp: parsed.sourceApp || parsed.source_app || "unknown",
-        date: parsed.timestamp || new Date(),
+        time: parsed.timestamp || new Date(),
       };
 
       await Log.create(logEntry);

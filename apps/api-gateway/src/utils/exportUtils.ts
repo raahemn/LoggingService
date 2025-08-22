@@ -29,7 +29,7 @@ export const convertLogsToCSV = (logs: ILog[]): string => {
   
   logs.forEach(log => {
     const row = [
-      `"${log.date ? new Date(log.date).toISOString() : ''}"`,
+      `"${log.time ? new Date(log.time).toISOString() : ''}"`,
       `"${log.logLevel || ''}"`,
       `"${log.sourceApp || ''}"`,
       `"${log.traceId || ''}"`,
@@ -51,7 +51,7 @@ export const convertLogsToJSON = (logs: ILog[]): string => {
   }
   
   const formattedLogs = logs.map(log => ({
-    date: log.date ? new Date(log.date).toISOString() : null,
+    time: log.time ? new Date(log.time).toISOString() : null,
     logLevel: log.logLevel || null,
     sourceApplication: log.sourceApp || null,
     traceId: log.traceId || null,

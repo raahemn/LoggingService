@@ -11,7 +11,7 @@ interface LogFilters {
 }
 
 export const getNewLogs = async (since: Date): Promise<ILog[]> => {
-  return await Log.find({ date: { $gt: since } }).sort({ date: 1 });
+  return await Log.find({ time: { $gt: since } }).sort({ time: 1 });
 };
 
 export const getLogs = async (
@@ -20,7 +20,7 @@ export const getLogs = async (
   page: number = 1,
   limit: number = 25,
   filters?: LogFilters,
-  sortBy: string = 'date',
+  sortBy: string = 'time',
   sortOrder: 'asc' | 'desc' = 'desc'
 ): Promise<{
   logs: ILog[];
@@ -41,31 +41,31 @@ export const getLogs = async (
     const sortDirection = sortOrder === 'desc' ? -1 : 1;
     
     const fieldMapping: { [key: string]: string } = {
-      'timestamp': 'date',
+      'timestamp': 'time',
       'logLevel': 'logLevel',
       'sourceApp': 'sourceAppName',
       'traceId': 'traceId',
       'message': 'message',
-      'date': 'date'
+      'time': 'time'
     };
-    
-    const backendField = fieldMapping[sortBy] || 'date';
+
+    const backendField = fieldMapping[sortBy] || 'time';
     sortObj[backendField] = sortDirection;
 
     const logMatchConditions: any = {
       $expr: {
         $and: [
           { $in: ["$sourceApp", "$$appIds"] },
-          { $gt: ["$date", since] }
+          { $gt: ["$time", since] }
         ]
       }
     };
 
     if (filters?.fromDate) {
-      logMatchConditions.$expr.$and.push({ $gte: ["$date", filters.fromDate] });
+      logMatchConditions.$expr.$and.push({ $gte: ["$time", filters.fromDate] });
     }
     if (filters?.toDate) {
-      logMatchConditions.$expr.$and.push({ $lte: ["$date", filters.toDate] });
+      logMatchConditions.$expr.$and.push({ $lte: ["$time", filters.toDate] });
     }
 
     if (filters?.applications && filters.applications.length > 0) {
@@ -212,12 +212,12 @@ export const getLogStats = async (
       }
     };
 
-    // Add date filters
+    // Add time filters
     if (filters?.fromDate) {
-      logMatchConditions.$expr.$and.push({ $gte: ["$date", filters.fromDate] });
+      logMatchConditions.$expr.$and.push({ $gte: ["$time", filters.fromDate] });
     }
     if (filters?.toDate) {
-      logMatchConditions.$expr.$and.push({ $lte: ["$date", filters.toDate] });
+      logMatchConditions.$expr.$and.push({ $lte: ["$time", filters.toDate] });
     }
 
     // Add application filter
@@ -308,16 +308,16 @@ export const getAllLogs = async (
       $expr: {
         $and: [
           { $in: ["$sourceApp", "$appIds"] },
-          { $gt: ["$date", since] }
+          { $gt: ["$time", since] }
         ]
       }
     };
 
     if (filters?.fromDate) {
-      logMatchConditions.$expr.$and.push({ $gte: ["$date", filters.fromDate] });
+      logMatchConditions.$expr.$and.push({ $gte: ["$time", filters.fromDate] });
     }
     if (filters?.toDate) {
-      logMatchConditions.$expr.$and.push({ $lte: ["$date", filters.toDate] });
+      logMatchConditions.$expr.$and.push({ $lte: ["$time", filters.toDate] });
     }
 
     if (filters?.applications && filters.applications.length > 0) {
@@ -331,7 +331,7 @@ export const getAllLogs = async (
 
     const lookupPipeline: any[] = [
       { $match: logMatchConditions },
-      { $sort: { date: -1 } },
+      { $sort: { time: -1 } },
       
       // Lookup application details
       {

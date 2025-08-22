@@ -5,7 +5,7 @@ export function parseLogLine(line: string) {
   const match = line.match(regex);
   if (!match) return null;
   return {
-    date: new Date(match[1]),
+    time: new Date(match[1]),
     log_level: match[2],
     trace_id: match[3],
     message: match[4],

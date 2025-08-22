@@ -3,7 +3,7 @@ export interface Log {
   message: string;
   logLevel: string;
   traceId: string;
-  date: string;
+  time: string;
   sourceApp: string;
 }
 

@@ -12,7 +12,7 @@ type Log = {
   message: string;
   log_level: string;
   trace_id: string;
-  date: string;
+  time: string;
 };
 
 type Props = {

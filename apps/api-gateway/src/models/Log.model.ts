@@ -5,7 +5,7 @@ export interface ILog extends Document {
   logLevel: string;
   traceId: string;
   sourceApp: mongoose.Types.ObjectId;
-  date: Date;
+  time: Date;
 }
 
 const logSchema: Schema<ILog> = new Schema(
@@ -28,7 +28,7 @@ const logSchema: Schema<ILog> = new Schema(
       ref: 'Application',
       required: true,
     },
-    date: {
+    time: {
       type: Date,
       default: Date.now,
     },
@@ -39,8 +39,8 @@ const logSchema: Schema<ILog> = new Schema(
 );
 
 // Optimized indexes based on actual query patterns in services
-logSchema.index({ date: -1, sourceApp: 1 }); // Primary index for time-based queries with app filtering
-logSchema.index({ sourceApp: 1, date: -1, logLevel: 1 }); // For app-specific queries with level filtering
+logSchema.index({ time: -1, sourceApp: 1 }); // Primary index for time-based queries with app filtering
+logSchema.index({ sourceApp: 1, time: -1, logLevel: 1 }); // For app-specific queries with level filtering
 logSchema.index({ message: 'text', logLevel: 'text' }); // Text search index for search functionality
 
 export const Log: Model<ILog> = mongoose.model<ILog>('Log', logSchema);

@@ -89,7 +89,7 @@ export const getAllApplications = async (
                 $expr: {
                   $and: [
                     { $eq: ['$sourceApp', '$$appId'] },
-                    { $gte: ['$date', twentyFourHoursAgo] }
+                    { $gte: ['$time', twentyFourHoursAgo] }
                   ]
                 }
               }

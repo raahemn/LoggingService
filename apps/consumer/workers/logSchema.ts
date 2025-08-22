@@ -5,7 +5,7 @@ export interface ILog extends Document {
   logLevel: string;
   traceId: string;
   sourceApp: mongoose.Types.ObjectId;
-  date: Date;
+  time: Date;
 }
 
 const logSchema: Schema<ILog> = new Schema(
@@ -28,7 +28,7 @@ const logSchema: Schema<ILog> = new Schema(
       ref: 'Application',
       required: true,
     },
-    date: {
+    time: {
       type: Date,
       default: Date.now,
     },

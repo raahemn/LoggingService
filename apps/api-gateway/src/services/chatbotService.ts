@@ -125,7 +125,7 @@ Key Collections:
 • **users** — Contains user authentication and profile data
 • **groups** — Defines user groups and roles
 • **logs** — Log entries with fields:
-   - date
+   - time
    - logLevel (e.g., "ERROR", "DEBUG", "WARNING", "INFO") [Case Sensitive]
    - message
    - traceId
@@ -139,7 +139,7 @@ WORKFLOW RULES
 1. You must always check collection schemas via the collection-schema tool before querying anything.
 2. When working with logs:  
    • Fetch schema using the \`mcp_mongodb_collection-indexes\` tool
-   • Use appropriate date ranges
+   • Use appropriate time ranges
 3. For advanced insights, use aggregation pipelines.
 4. Enforce access controls: Users may only access data tied to their authorized applications.
 5. **DELETED OBJECTS RULE: Never access, read, remove, or update objects that are marked as deleted.**
