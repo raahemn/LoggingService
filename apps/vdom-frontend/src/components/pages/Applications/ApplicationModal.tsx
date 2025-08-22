@@ -5,6 +5,7 @@ import 'ojs/ojswitch';
 interface ApplicationModalProps {
   showModal: boolean;
   isEditing: boolean;
+  editingAppId?: string | null;
   newAppName: string;
   newAppDescription: string;
   newAppActive: boolean;
@@ -24,6 +25,7 @@ interface ApplicationModalProps {
 export function ApplicationModal({
   showModal,
   isEditing,
+  editingAppId,
   newAppName,
   newAppDescription,
   newAppActive,
@@ -69,6 +71,11 @@ export function ApplicationModal({
           <p style="margin: 8px 0 0 0; color: #6b7280; font-size: 0.875rem; font-family: 'Poppins', sans-serif;">
             {isEditing ? 'Update the application details' : 'Enter the details for your new application'}
           </p>
+          {isEditing && editingAppId && (
+            <p style="margin: 4px 0 0 0; color: #9ca3af; font-size: 0.75rem; font-family: 'Courier New', monospace; font-weight: 500;">
+              ID: {editingAppId}
+            </p>
+          )}
         </div>
 
         <div style="margin-bottom: 20px;">

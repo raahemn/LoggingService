@@ -472,6 +472,7 @@ export function Applications() {
       <ApplicationModal
         showModal={showModal}
         isEditing={isEditing}
+        editingAppId={editingAppId}
         newAppName={newAppName}
         newAppDescription={newAppDescription}
         newAppActive={newAppActive}

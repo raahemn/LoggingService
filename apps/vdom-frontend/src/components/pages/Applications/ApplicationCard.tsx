@@ -39,8 +39,11 @@ export function ApplicationCard({ app, onEdit, onDelete, isDeleting }: Applicati
           <h3 style="margin: 0 0 4px 0; font-size: 1.125rem; font-weight: 600; font-family: 'Poppins', sans-serif; color: #111827;">
             {app.name}
           </h3>
-          <p style="margin: 0; color: #6b7280; font-size: 0.875rem; font-family: 'Poppins', sans-serif;">
+          <p style="margin: 0 0 4px 0; color: #6b7280; font-size: 0.875rem; font-family: 'Poppins', sans-serif;">
             {app.description}
+          </p>
+          <p style="margin: 0; color: #9ca3af; font-size: 0.75rem; font-family: 'Courier New', monospace; font-weight: 500;">
+            ID: {appId}
           </p>
         </div>
         <div class="oj-flex" style="gap: 4px;">
