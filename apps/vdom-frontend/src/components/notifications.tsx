@@ -152,11 +152,11 @@ export function Notifications() {
           </div>
         ) : (
           <div class="oj-flex oj-sm-flex-direction-column">
-            {alerts.map((alert) => {
+            {alerts.map((alert, index) => {
               const isAnimating = animatingOut.has(alert._id);
               return (
                 <div
-                  key={alert._id}
+                  key={index}
                   class="oj-sm-padding-2x oj-flex oj-sm-align-items-center oj-sm-border-radius oj-bg-neutral-10 oj-sm-border-1"
                   style={{
                     borderColor: "var(--oj-core-divider-color)",

@@ -122,15 +122,12 @@ export const App = registerCustomElement(
     }, []);
 
     useEffect(() => {
-      try {
-        SocketService.init();
-      } catch (err) {
-        console.error(err);
-      }
-
-      return () => {
+      if (appState.isAuthenticated) {
         SocketService.disconnect();
-      };
+        SocketService.init();
+      } else {
+        SocketService.disconnect();
+      }
     }, [appState.isAuthenticated]);
 
 

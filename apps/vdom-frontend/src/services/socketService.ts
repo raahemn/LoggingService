@@ -5,40 +5,29 @@ import ApiLinks from "../network/apiLinks";
 class SocketService {
   private static socket: Socket | null = null;
 
-  private static getAuthHeaders(): Record<string, string> {
-    const token = AuthManager.getToken();
-    const headers: Record<string, string> = {};
-
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
-
-    return headers;
-  }
-
   static init(): void {
     if (!AuthManager.isAuthenticated()) {
-      throw new Error("User not authenticated");
+      console.warn("Tried to init socket without auth");
+      return;
     }
-
-    console.log("Initializing socket connection...");
-
+    // If socket already exists, do not reinitialize
     if (!this.socket) {
       this.socket = io(ApiLinks.SOCKET, {
         transports: ["websocket"],
         auth: { token: `Bearer ${AuthManager.getToken()}` },
+        reconnectionDelay: 1000,
       });
 
       this.socket.on("connect", () => {
-        console.log("✅ Socket connected:", this.socket?.id);
+        console.log("Socket connected:", this.socket?.id);
       });
 
       this.socket.on("disconnect", (reason) => {
-        console.log("❌ Socket disconnected:", reason);
+        console.log("Socket disconnected:", reason);
       });
 
       this.socket.on("connect_error", (err) => {
-        console.error("⚠️ Socket connection error:", err.message);
+        console.error("Socket connection error:", err.message);
       });
     }
   }
