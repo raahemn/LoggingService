@@ -42,6 +42,9 @@ export function initSocket(server: http.Server) {
     socket.on('register', (userId: string) => {
       logger.info(`User ${userId} registered on socket ${socket.id}`)
       socket.data.userId = userId // store user on socket
+
+      // Create a room for this user
+      socket.join(userId);
     })
 
     socket.emit('test', { message: 'test message' })
