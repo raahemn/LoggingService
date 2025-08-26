@@ -1,6 +1,6 @@
 class ApiLinks {
   // static readonly API_BASE_URL: string = "http://localhost:3000/api";
-  static readonly API_BASE_URL: string = "http://localhost:8080/api";
+  static readonly API_BASE_URL: string = "http://localhost:8080/LoggingService";
 
 
   // Application APIs

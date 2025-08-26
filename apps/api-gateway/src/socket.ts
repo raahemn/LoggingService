@@ -14,7 +14,7 @@ export function initSocket(server: http.Server) {
       methods: ['GET', 'POST'],
       credentials: true
     },
-    path: '/api/socket.io'
+    path: '/LoggingService/socket.io'
   })
 
   // Auth middleware
