@@ -10,10 +10,11 @@ let io: Server
 export function initSocket(server: http.Server) {
   io = new Server(server, {
     cors: {
-      origin: '*', // tighten later for production
+      origin: '*', // restrict later
       methods: ['GET', 'POST'],
       credentials: true
-    }
+    },
+    path: '/api/socket.io'
   })
 
   // Auth middleware
@@ -59,6 +60,7 @@ export function initSocket(server: http.Server) {
 
     setInterval(() => {
       // emit to all connected clients
+      // console.log('Emitting test alert to all clients')
       io.emit('socketNotification', alert)
     }, 5000)
 

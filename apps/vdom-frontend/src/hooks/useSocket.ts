@@ -18,7 +18,7 @@ export function useSocket<T = any>(eventName: string) {
     return () => {
       socket.off(eventName, handler);
     };
-  }, [eventName]);
+  }, [eventName, SocketService.getSocket()]);
 
   return data;
 }

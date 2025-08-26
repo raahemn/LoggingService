@@ -13,6 +13,7 @@ class SocketService {
     // If socket already exists, do not reinitialize
     if (!this.socket) {
       this.socket = io(ApiLinks.SOCKET, {
+        path: "/api/socket.io",
         transports: ["websocket"],
         auth: { token: `Bearer ${AuthManager.getToken()}` },
         reconnectionDelay: 1000,
