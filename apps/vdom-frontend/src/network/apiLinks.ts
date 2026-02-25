@@ -1,5 +1,7 @@
 class ApiLinks {
-  static readonly API_BASE_URL: string = "http://localhost:3000/api";
+  // static readonly API_BASE_URL: string = "http://localhost:3000/api";
+  static readonly API_BASE_URL: string = "http://localhost:8080/LoggingService";
+
 
   // Application APIs
   static readonly GET_ALL_APPLICATIONS: string = `${ApiLinks.API_BASE_URL}/application`;
@@ -35,6 +37,8 @@ class ApiLinks {
   static readonly GET_STARRED_MESSAGES: string = `${ApiLinks.API_BASE_URL}/starred-messages`;
   static readonly ADD_STARRED_MESSAGE: string = `${ApiLinks.API_BASE_URL}/starred-messages`;
   static readonly REMOVE_STARRED_MESSAGE: string = `${ApiLinks.API_BASE_URL}/starred-messages`;
+
+  static readonly SOCKET: string = "http://localhost:8080";
 }
 
 export default ApiLinks;

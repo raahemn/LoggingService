@@ -1,7 +1,7 @@
 import { registerCustomElement } from "ojs/ojvcomponent";
 import { useEffect } from "preact/hooks";
 import Context = require("ojs/ojcontext");
-
+import SocketService from "../services/socketService";
 import { Footer } from "./footer";
 import { Header } from "./header";
 import { Applications } from "./pages/Applications/index";
@@ -24,6 +24,8 @@ type Props = Readonly<{
 export const App = registerCustomElement(
   "app-root",
   ({ appName = "Log Stream", userLogin = "john.hancock@oracle.com" }: Props) => {
+
+    
     
     const routes: RouteConfig[] = [
       {
@@ -118,6 +120,16 @@ export const App = registerCustomElement(
     useEffect(() => {
       Context.getPageContext().getBusyContext().applicationBootstrapComplete();
     }, []);
+
+    useEffect(() => {
+      if (appState.isAuthenticated) {
+        SocketService.disconnect();
+        SocketService.init();
+      } else {
+        SocketService.disconnect();
+      }
+    }, [appState.isAuthenticated]);
+
 
     if (!appState.isInitialized) {
       return (

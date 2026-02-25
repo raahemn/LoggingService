@@ -74,7 +74,7 @@ export class AuthManager {
    * Login with Google OAuth
    */
   static async loginWithGoogle(accessToken: string): Promise<void> {
-    const response = await fetch('http://localhost:3000/api/auth/google', {
+    const response = await fetch('http://localhost:8080/LoggingService/auth/google', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

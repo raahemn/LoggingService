@@ -18,9 +18,9 @@ app.use(successHandler)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(mongoSanitize())
-app.use(cors())
+// app.use(cors())    //disable these when connecting via the API Gateway
 
-app.use('/api', routes)
+app.use('/LoggingService', routes)
 
 // Handle 404
 app.use((req: Request, res: Response, next: NextFunction) => {

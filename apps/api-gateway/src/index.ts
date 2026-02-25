@@ -8,6 +8,7 @@ import { monitoringService } from './services/monitoringService'
 import { logRetentionService } from './services/dataRetentionService'
 import { initializeChatbot, closeChatbot } from './controllers/chatbotController'
 import logger from './config/logger'
+import { initSocket } from './socket'
 
 // Debug loggers for different components
 const startupDebugger = logger.withTraceId('STARTUP')
@@ -48,6 +49,7 @@ process.on('warning', (warning: Error) => {
 })
 
 const server = http.createServer(app)
+initSocket(server);
 
 const PORT = config.port
 
